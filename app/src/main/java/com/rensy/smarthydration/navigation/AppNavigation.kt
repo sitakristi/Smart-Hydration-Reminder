@@ -14,10 +14,8 @@ import com.rensy.smarthydration.database.repository.DailyProgressRepository
 import com.rensy.smarthydration.database.repository.HydrationLogRepository
 import com.rensy.smarthydration.database.repository.UserRepository
 import com.rensy.smarthydration.ui.screen.DashboardScreen
-import com.rensy.smarthydration.ui.screen.HydrationScreen
-import com.rensy.smarthydration.ui.screen.ProfileScreen
-
-// ── Route constants ───────────────────────────────────────────────────────────
+import com.rensy.smarthydration.ui.view.HydrationScreen
+import com.rensy.smarthydration.ui.view.ProfileScreen
 
 object Routes {
     const val PROFILE = "profile"
@@ -25,19 +23,11 @@ object Routes {
     const val HYDRATION = "hydration"
 }
 
-// ── Root Navigation ───────────────────────────────────────────────────────────
-
-/**
- * AppNavigation — titik masuk navigasi seluruh aplikasi.
- * Menentukan start destination berdasarkan apakah user sudah punya profil.
- * Semua controller di-inject di sini dan diteruskan ke masing-masing screen.
- */
 @Composable
 fun AppNavigation() {
     val context = LocalContext.current
     val navController: NavHostController = rememberNavController()
 
-    // ── Dependency injection manual ──────────────────────────────────────────
     val db = remember { AppDatabase.getInstance(context) }
 
     val userRepository = remember { UserRepository(db.userDao()) }
@@ -48,16 +38,14 @@ fun AppNavigation() {
     val progressController = remember { ProgressController(dailyProgressRepository, hydrationLogRepository) }
     val hydrationController = remember { HydrationController(hydrationLogRepository, dailyProgressRepository) }
 
-    // ── Tentukan start destination ───────────────────────────────────────────
     var startDestination by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         startDestination = if (userController.hasUser()) Routes.DASHBOARD else Routes.PROFILE
     }
 
-    if (startDestination == null) return // tunggu check selesai
+    if (startDestination == null) return
 
-    // ── NavHost ──────────────────────────────────────────────────────────────
     NavHost(
         navController = navController,
         startDestination = startDestination!!

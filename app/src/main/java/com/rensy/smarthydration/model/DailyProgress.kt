@@ -21,34 +21,33 @@ data class DailyProgress(
     @PrimaryKey(autoGenerate = true)
     val progressID: Int = 0,
     val userID: Int,
-    val date: String,              // "yyyy-MM-dd"
-    val totalIntake: Int = 0,      // total air diminum (ml)
-    val targetAmount: Int,         // target harian (ml)
-    val percentage: Float = 0f,    // (totalIntake / targetAmount) × 100
-    val remainingAmount: Int = 0,  // targetAmount - totalIntake
+    val date: String,                  // "yyyy-MM-dd"
+    val totalIntake: Int = 0,          // total air diminum (ml)
+    val targetAmount: Int,             // target harian (ml)
+    val percentageValue: Float = 0f,   // renamed: hindari clash dengan getPercentage()
+    val remainingAmount: Int = 0,      // targetAmount - totalIntake
     val isAchieved: Boolean = false
 ) {
     /**
      * Menghitung total intake dari list HydrationLog hari ini.
-     * Digunakan untuk inisialisasi / recalculate.
      */
     fun calculateTotal(logs: List<HydrationLog>): Int {
         return logs.sumOf { it.amount }
     }
 
     /**
-     * Menghitung persentase pencapaian.
-     * (totalIntake / targetAmount) × 100
+     * Menghitung persentase pencapaian secara dinamis.
+     * Gunakan ini di UI, bukan field percentageValue.
      */
-    fun getPercentage(): Float {
+    fun computePercentage(): Float {
         if (targetAmount == 0) return 0f
         return (totalIntake.toFloat() / targetAmount.toFloat()) * 100f
     }
 
     /**
-     * Menghitung sisa kebutuhan air: targetAmount - totalIntake.
+     * Menghitung sisa kebutuhan air secara dinamis.
      */
-    fun getRemainingAmount(): Int {
+    fun computeRemainingAmount(): Int {
         return maxOf(0, targetAmount - totalIntake)
     }
 
@@ -69,7 +68,7 @@ data class DailyProgress(
         val newRemaining = maxOf(0, targetAmount - newTotalIntake)
         return this.copy(
             totalIntake = newTotalIntake,
-            percentage = newPercentage,
+            percentageValue = newPercentage,
             remainingAmount = newRemaining,
             isAchieved = newTotalIntake >= targetAmount
         )

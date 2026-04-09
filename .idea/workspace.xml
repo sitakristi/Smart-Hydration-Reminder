@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e52ff344-a84a-462d-b04e-695877641748" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
+    <list default="true" id="a6202538-982c-4213-a0e6-050623524087" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/controller/ProgressController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/controller/ProgressController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/database/repository/DailyProgressRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/database/repository/DailyProgressRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/model/DailyProgress.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/model/DailyProgress.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/navigation/AppNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/navigation/AppNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/ui/view/DashboardView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/rensy/smarthydration/ui/view/DashboardView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +31,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\RENSY\.android\avd\Pixel_3a.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -27,6 +40,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -41,42 +57,29 @@
       </state>
     </system>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Kotlin Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$PROJECT_DIR$/../.gradle/wrapper/dists/gradle-8.13-bin/5xuhj0ry160q40clulazy9h7d/gradle-8.13" javaHome="$APPLICATION_HOME_DIR$/jbr/Contents/Home" gradleVersion="8.13" />
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 5
-}</component>
-  <component name="ProjectId" id="3C4ugScAY7O9D0SYAjjO17AdkYd" />
-  <component name="ProjectReloadState">
-    <option name="STATE" value="1" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="3C6Sxx40DF5QdFJUpvNVuOo4sGm" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Android App.app.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHELLCHECK.PATH": "C:\\Users\\RENSY\\AppData\\Roaming\\Google\\AndroidStudio2025.1.2\\plugins\\Shell Script\\shellcheck.exe",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "logic",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/rasithachristy/Smart-Hydration-Reminder",
+    "git-widget-placeholder": "data",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.17",
     "project.structure.side.proportion": "0.2"
@@ -163,12 +166,25 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e52ff344-a84a-462d-b04e-695877641748" name="Changes" comment="" />
-      <created>1775657275174</created>
+      <changelist id="a6202538-982c-4213-a0e6-050623524087" name="Changes" comment="" />
+      <created>1775704777564</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1775657275174</updated>
+      <updated>1775704777564</updated>
     </task>
+    <task id="LOCAL-00001" summary="fix namespace">
+      <option name="closed" value="true" />
+      <created>1775718849151</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1775718849151</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix namespace" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix namespace" />
   </component>
 </project>
