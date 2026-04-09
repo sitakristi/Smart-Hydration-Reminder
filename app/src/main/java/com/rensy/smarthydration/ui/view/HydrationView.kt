@@ -1,30 +1,63 @@
 package com.rensy.smarthydration.ui.view
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rensy.smarthydration.controller.HydrationController
 import com.rensy.smarthydration.controller.ProgressController
 import com.rensy.smarthydration.controller.UserController
 import com.rensy.smarthydration.model.HydrationLog
 import com.rensy.smarthydration.model.User
-import com.rensy.smarthydration.ui.components.HydrationLogItem
-import com.rensy.smarthydration.ui.components.QuickWaterButtonRow
+import com.rensy.smarthydration.ui.theme.AccentOrange
+import com.rensy.smarthydration.ui.theme.BackgroundWhite
+import com.rensy.smarthydration.ui.theme.LightGray
+import com.rensy.smarthydration.ui.theme.PrimaryBlue
 import kotlinx.coroutines.launch
 
 /**
  * HydrationScreen — View untuk UC02 (Mencatat Konsumsi Air).
- * Menampilkan QuickWaterButton, form input manual, dan daftar log hari ini.
+ * Menampilkan QuickWaterButton dan daftar log hari ini.
  * Validasi: 0 < volume ≤ 2000 ml.
  *
  * @param userController         Controller untuk load user
@@ -45,13 +78,13 @@ fun HydrationScreen(
     var user by remember { mutableStateOf<User?>(null) }
     var logs by remember { mutableStateOf<List<HydrationLog>>(emptyList()) }
     var selectedAmount by remember { mutableStateOf<Int?>(null) }
-    var customAmountText by remember { mutableStateOf("") }
-    var validationError by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(true) }
+    var showMenu by remember { mutableStateOf(false) }
     var showSuccessSnackbar by remember { mutableStateOf(false) }
 
-    val quickOptions = hydrationController.getQuickOptions()
+    hydrationController.getQuickOptions()
     val snackbarHostState = remember { SnackbarHostState() }
+    val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
 
     fun refreshLogs() {
         coroutineScope.launch {
@@ -74,133 +107,241 @@ fun HydrationScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Catat Konsumsi Air") },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali",
-                            tint = MaterialTheme.colorScheme.onPrimary)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundWhite)
+    ) {
+        // 1. TOP APP BAR
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp + statusBarPadding.calculateTopPadding())
+                .background(PrimaryBlue)
+        ) {
+            // Left: Back arrow with status bar padding
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                tint = AccentOrange,
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        top = statusBarPadding.calculateTopPadding()
+                    )
+                    .align(Alignment.CenterStart)
+                    .clickable { onNavigateBack() })
+
+            // Right: Menu icon with status bar padding
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(
+                        end = 16.dp,
+                        top = statusBarPadding.calculateTopPadding()
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu",
+                    tint = AccentOrange,
+                    modifier = Modifier.clickable { showMenu = !showMenu })
+
+                // Dropdown menu
+                if (showMenu) {
+                    DropdownMenu(
+                        expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        DropdownMenuItem(text = { Text("Profile") }, onClick = { showMenu = false })
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        if (isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                }
             }
-            return@Scaffold
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 16.dp)
-        ) {
-            // ── Quick Buttons ──────────────────────────────────────────────────
-            item {
-                Text(
-                    "Pilih Volume Cepat",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(Modifier.height(8.dp))
-                QuickWaterButtonRow(
-                    options = quickOptions,
-                    selectedAmount = selectedAmount,
-                    onAmountSelected = { amount ->
-                        selectedAmount = amount
-                        customAmountText = ""
-                        validationError = ""
-                    }
-                )
+        // MAIN CONTENT
+        if (isLoading) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 56.dp + statusBarPadding.calculateTopPadding()), contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 56.dp + statusBarPadding.calculateTopPadding())
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // ── Custom Input ───────────────────────────────────────────────────
-            item {
-                Text(
-                    "Atau Input Manual",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = customAmountText,
-                    onValueChange = {
-                        customAmountText = it
-                        selectedAmount = null
-                        validationError = ""
-                    },
-                    label = { Text("Volume (ml)") },
-                    suffix = { Text("ml") },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true,
-                    isError = validationError.isNotEmpty()
-                )
-                if (validationError.isNotEmpty()) {
-                    Text(
-                        validationError,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-
-            // ── Tombol Simpan ──────────────────────────────────────────────────
-            item {
-                Button(
-                    onClick = {
-                        val amount = selectedAmount
-                            ?: customAmountText.toIntOrNull()
-                            ?: 0
-                        val u = user ?: return@Button
-
-                        if (!hydrationController.validateAmount(amount)) {
-                            validationError = "Volume harus antara 1 – 2000 ml."
-                            return@Button
-                        }
-
-                        coroutineScope.launch {
-                            val success = hydrationController.logWater(u.userID, amount, u.dailyTarget)
-                            if (success) {
-                                selectedAmount = null
-                                customAmountText = ""
-                                validationError = ""
-                                refreshLogs()
-                                showSuccessSnackbar = true
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = selectedAmount != null || customAmountText.isNotBlank()
+                // 2. QUICK SELECT GRID
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text("Simpan")
+                    // Button 1: 100 ml
+                    OutlinedButton(
+                        onClick = { selectedAmount = 100 },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(90.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(2.dp, PrimaryBlue),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = BackgroundWhite
+                        )
+                    ) {
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = "100",
+                                color = AccentOrange,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ml", color = AccentOrange, fontSize = 16.sp
+                            )
+                        }
+                    }
+
+                    // Button 2: 200 ml
+                    OutlinedButton(
+                        onClick = { selectedAmount = 200 },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(90.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(2.dp, PrimaryBlue),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = BackgroundWhite
+                        )
+                    ) {
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = "200",
+                                color = AccentOrange,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ml", color = AccentOrange, fontSize = 16.sp
+                            )
+                        }
+                    }
                 }
-            }
 
-            // ── Log Hari Ini ───────────────────────────────────────────────────
-            item {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Button 3: 250 ml
+                    OutlinedButton(
+                        onClick = { selectedAmount = 250 },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(90.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(2.dp, PrimaryBlue),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = BackgroundWhite
+                        )
+                    ) {
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = "250",
+                                color = AccentOrange,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ml", color = AccentOrange, fontSize = 16.sp
+                            )
+                        }
+                    }
+
+                    // Button 4: 300 ml
+                    OutlinedButton(
+                        onClick = { selectedAmount = 300 },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(90.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(2.dp, PrimaryBlue),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = BackgroundWhite
+                        )
+                    ) {
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text(
+                                text = "300",
+                                color = AccentOrange,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ml", color = AccentOrange, fontSize = 16.sp
+                            )
+                        }
+                    }
+                }
+
+                // Save button
+                if (selectedAmount != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = {
+                            val amount = selectedAmount ?: return@Button
+                            val u = user ?: return@Button
+
+                            if (!hydrationController.validateAmount(amount)) {
+                                return@Button
+                            }
+
+                            coroutineScope.launch {
+                                val success =
+                                    hydrationController.logWater(u.userID, amount, u.dailyTarget)
+                                if (success) {
+                                    selectedAmount = null
+                                    refreshLogs()
+                                    showSuccessSnackbar = true
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = PrimaryBlue
+                        )
+                    ) {
+                        Text(
+                            text = "Simpan", color = AccentOrange, fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // 3. TODAY'S DRINKING NOTES SECTION
                 Text(
-                    "Catatan Hari Ini (${logs.size} entri)",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    text = "today's drinking notes",
+                    color = PrimaryBlue,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
-            }
 
-            if (logs.isEmpty()) {
-                item {
-                    // showEmptyState
+                Spacer(modifier = Modifier.height(12.dp))
+
+                if (logs.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -208,33 +349,59 @@ fun HydrationScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("💧", style = MaterialTheme.typography.headlineLarge)
-                            Spacer(Modifier.height(8.dp))
+                            Text("💧", fontSize = 48.sp)
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 "Belum ada catatan minum hari ini.\nYuk mulai minum!",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                color = PrimaryBlue.copy(alpha = 0.5f)
                             )
                         }
                     }
-                }
-            } else {
-                items(logs, key = { it.logID }) { log ->
-                    HydrationLogItem(
-                        log = log,
-                        onDeleteConfirmed = { logID ->
-                            coroutineScope.launch {
-                                user?.let {
-                                    hydrationController.deleteLog(logID, it.userID, it.dailyTarget)
-                                    refreshLogs()
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        logs.forEach { log ->
+                            // Format time from timestamp
+                            val time =
+                                java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
+                                    .format(java.util.Date(log.timestamp))
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(LightGray, RoundedCornerShape(12.dp))
+                                    .padding(horizontal = 16.dp, vertical = 14.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "${log.amount} ml",
+                                        color = AccentOrange,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = time, color = PrimaryBlue, fontSize = 16.sp
+                                    )
                                 }
                             }
                         }
-                    )
+                    }
                 }
-            }
 
-            item { Spacer(Modifier.height(16.dp)) }
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
+
+        // Snackbar host
+        SnackbarHost(
+            hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }

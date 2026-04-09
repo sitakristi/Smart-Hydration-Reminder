@@ -11,7 +11,7 @@ import java.util.*
  * Menerima event dari UserView/ProfileScreen, memproses ke Model, dan
  * menginstruksikan View untuk update.
  */
-class UserController(private val userRepository: UserRepository) {
+open class UserController(private val userRepository: UserRepository) {
 
     /**
      * Menyimpan data profil pengguna baru ke database.

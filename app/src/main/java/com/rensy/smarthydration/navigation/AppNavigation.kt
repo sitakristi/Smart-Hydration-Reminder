@@ -1,5 +1,6 @@
 package com.rensy.smarthydration.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -16,8 +17,10 @@ import com.rensy.smarthydration.database.repository.UserRepository
 import com.rensy.smarthydration.ui.screen.DashboardScreen
 import com.rensy.smarthydration.ui.view.HydrationScreen
 import com.rensy.smarthydration.ui.view.ProfileScreen
+import com.rensy.smarthydration.ui.view.SplashScreen
 
 object Routes {
+    const val SPLASH = "splash"
     const val PROFILE = "profile"
     const val DASHBOARD = "dashboard"
     const val HYDRATION = "hydration"
@@ -26,6 +29,7 @@ object Routes {
 @Composable
 fun AppNavigation() {
     val context = LocalContext.current
+    val activity = context as? Activity
     val navController: NavHostController = rememberNavController()
 
     val db = remember { AppDatabase.getInstance(context) }
@@ -41,10 +45,16 @@ fun AppNavigation() {
     var startDestination by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
+        // Show splash for 2 seconds, then navigate to appropriate screen
+        kotlinx.coroutines.delay(2000)
         startDestination = if (userController.hasUser()) Routes.DASHBOARD else Routes.PROFILE
     }
 
-    if (startDestination == null) return
+    if (startDestination == null) {
+        // Show splash screen while loading
+        SplashScreen(onGetStarted = {})
+        return
+    }
 
     NavHost(
         navController = navController,
@@ -70,6 +80,10 @@ fun AppNavigation() {
                 },
                 onNavigateToProfile = {
                     navController.navigate(Routes.PROFILE)
+                },
+                onBack = {
+                    // Close the app when back is pressed on the root screen
+                    activity?.finish()
                 }
             )
         }

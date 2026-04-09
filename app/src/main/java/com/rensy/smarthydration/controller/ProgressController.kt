@@ -11,7 +11,7 @@ import java.util.*
  * Menjembatani DailyProgress dengan ProgressView/DashboardScreen.
  * Dipanggil setiap kali ada log air baru untuk recalculate progress harian.
  */
-class ProgressController(
+open class ProgressController(
     private val progressRepository: DailyProgressRepository,
     private val hydrationLogRepository: HydrationLogRepository
 ) {
