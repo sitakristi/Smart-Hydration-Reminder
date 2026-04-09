@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.smarthydration.database.dao.DailyProgressDao
-import com.example.smarthydration.database.dao.HydrationLogDao
-import com.example.smarthydration.database.dao.UserDao
-import com.example.smarthydration.model.DailyProgress
-import com.example.smarthydration.model.HydrationLog
-import com.example.smarthydration.model.User
+import com.rensy.smarthydration.database.dao.DailyProgressDao
+import com.rensy.smarthydration.database.dao.HydrationLogDao
+import com.rensy.smarthydration.database.dao.UserDao
+import com.rensy.smarthydration.model.DailyProgress
+import com.rensy.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.User
 
 @Database(
     entities = [User::class, HydrationLog::class, DailyProgress::class],

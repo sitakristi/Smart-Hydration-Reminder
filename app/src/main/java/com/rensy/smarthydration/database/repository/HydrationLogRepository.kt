@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.database.repository
 
-import com.example.smarthydration.database.dao.HydrationLogDao
-import com.example.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.database.dao.HydrationLogDao
+import com.rensy.smarthydration.model.HydrationLog
 import java.text.SimpleDateFormat
 import java.util.*
 

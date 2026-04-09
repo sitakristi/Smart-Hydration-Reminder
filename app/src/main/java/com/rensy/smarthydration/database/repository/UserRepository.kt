@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.database.repository
 
-import com.example.smarthydration.database.dao.UserDao
-import com.example.smarthydration.model.User
+import com.rensy.smarthydration.database.dao.UserDao
+import com.rensy.smarthydration.model.User
 
 class UserRepository(private val userDao: UserDao) {
 
