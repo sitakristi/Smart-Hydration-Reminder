@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.database.dao
 
 import androidx.room.*
-import com.example.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.HydrationLog
 
 @Dao
 interface HydrationLogDao {
