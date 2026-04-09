@@ -34,7 +34,7 @@ class ProgressController(
             date = today,
             totalIntake = 0,
             targetAmount = target,
-            percentage = 0f,
+            percentageValue = 0f,
             remainingAmount = target,
             isAchieved = false
         )
