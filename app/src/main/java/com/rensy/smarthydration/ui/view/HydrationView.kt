@@ -49,6 +49,8 @@ import com.rensy.smarthydration.controller.ProgressController
 import com.rensy.smarthydration.controller.UserController
 import com.rensy.smarthydration.model.HydrationLog
 import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.ui.components.QuickWaterButton
+import com.rensy.smarthydration.ui.components.QuickWaterButtonRow
 import com.rensy.smarthydration.ui.theme.AccentOrange
 import com.rensy.smarthydration.ui.theme.BackgroundWhite
 import com.rensy.smarthydration.ui.theme.LightGray
@@ -175,120 +177,55 @@ fun HydrationScreen(
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // 2. QUICK SELECT GRID
-                Row(
+                // 2. QUICK SELECT BUTTONS - 2 rows with selection state
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Button 1: 100 ml
-                    OutlinedButton(
-                        onClick = { selectedAmount = 100 },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(90.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(2.dp, PrimaryBlue),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = BackgroundWhite
-                        )
+                    // Row 1: 100 ml and 200 ml
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = "100",
-                                color = AccentOrange,
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "ml", color = AccentOrange, fontSize = 16.sp
-                            )
-                        }
+                        QuickWaterButton(
+                            amount = 100,
+                            onClick = { selectedAmount = 100 },
+                            isSelected = selectedAmount == 100,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(90.dp)
+                        )
+                        QuickWaterButton(
+                            amount = 200,
+                            onClick = { selectedAmount = 200 },
+                            isSelected = selectedAmount == 200,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(90.dp)
+                        )
                     }
 
-                    // Button 2: 200 ml
-                    OutlinedButton(
-                        onClick = { selectedAmount = 200 },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(90.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(2.dp, PrimaryBlue),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = BackgroundWhite
-                        )
+                    // Row 2: 250 ml and 300 ml
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = "200",
-                                color = AccentOrange,
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "ml", color = AccentOrange, fontSize = 16.sp
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    // Button 3: 250 ml
-                    OutlinedButton(
-                        onClick = { selectedAmount = 250 },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(90.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(2.dp, PrimaryBlue),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = BackgroundWhite
+                        QuickWaterButton(
+                            amount = 250,
+                            onClick = { selectedAmount = 250 },
+                            isSelected = selectedAmount == 250,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(90.dp)
                         )
-                    ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = "250",
-                                color = AccentOrange,
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "ml", color = AccentOrange, fontSize = 16.sp
-                            )
-                        }
-                    }
-
-                    // Button 4: 300 ml
-                    OutlinedButton(
-                        onClick = { selectedAmount = 300 },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(90.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(2.dp, PrimaryBlue),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = BackgroundWhite
+                        QuickWaterButton(
+                            amount = 300,
+                            onClick = { selectedAmount = 300 },
+                            isSelected = selectedAmount == 300,
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(90.dp)
                         )
-                    ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = "300",
-                                color = AccentOrange,
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "ml", color = AccentOrange, fontSize = 16.sp
-                            )
-                        }
                     }
                 }
 
@@ -364,7 +301,7 @@ fun HydrationScreen(
                             .padding(horizontal = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        logs.forEach { log ->
+                        logs.sortedByDescending { it.timestamp }.forEach { log ->
                             // Format time from timestamp
                             val time =
                                 java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
