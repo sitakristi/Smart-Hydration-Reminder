@@ -1,4 +1,4 @@
-package com.rensy.smarthydration.ui.view
+package com.rensy.smarthydration.ui.screen
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -20,19 +20,8 @@ import com.rensy.smarthydration.controller.ProgressController
 import com.rensy.smarthydration.controller.UserController
 import com.rensy.smarthydration.model.DailyProgress
 import com.rensy.smarthydration.model.User
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/**
- * DashboardScreen — View untuk UC03 (Melihat Progress Harian).
- * Menampilkan progress bar, total konsumsi, target, sisa kebutuhan,
- * dan status pencapaian hari ini secara real-time.
- *
- * @param userController        Controller untuk load user
- * @param progressController    Controller untuk load dan update progress
- * @param onNavigateToHydration Callback navigasi ke HydrationScreen (catat air)
- * @param onNavigateToProfile   Callback navigasi ke ProfileScreen
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -46,7 +35,6 @@ fun DashboardScreen(
     var progress by remember { mutableStateOf<DailyProgress?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    // Animasi progress bar
     val animatedProgress = remember { Animatable(0f) }
 
     fun loadData() {
@@ -57,8 +45,8 @@ fun DashboardScreen(
             if (loadedUser != null) {
                 val p = progressController.getTodayProgress(loadedUser.userID, loadedUser.dailyTarget)
                 progress = p
-                // Animasikan progress bar
-                val targetPercent = (p.percentage / 100f).coerceIn(0f, 1f)
+                // pakai computePercentage() bukan getPercentage()
+                val targetPercent = (p.computePercentage() / 100f).coerceIn(0f, 1f)
                 animatedProgress.animateTo(
                     targetValue = targetPercent,
                     animationSpec = tween(durationMillis = 800, easing = EaseOut)
@@ -131,8 +119,6 @@ fun DashboardScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            // ── Progress Circle + Status ──────────────────────────────────────
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -149,17 +135,15 @@ fun DashboardScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Status label
                     if (p.isTargetAchieved()) {
                         Text(
-                            "🎉 Target Tercapai!",
+                            "Target Tercapai!",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
 
-                    // Progress bar linear
                     Text(
                         "${p.totalIntake} ml",
                         fontSize = 36.sp,
@@ -185,43 +169,26 @@ fun DashboardScreen(
                         strokeCap = StrokeCap.Round
                     )
 
+                    // pakai computePercentage()
                     Text(
-                        "${p.getPercentage().toInt()}%",
+                        "${p.computePercentage().toInt()}%",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
 
-            // ── Stats Cards ───────────────────────────────────────────────────
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Total diminum
-                StatCard(
-                    label = "Diminum",
-                    value = "${p.totalIntake}",
-                    unit = "ml",
-                    modifier = Modifier.weight(1f)
-                )
-                // Sisa kebutuhan
-                StatCard(
-                    label = "Sisa",
-                    value = "${p.getRemainingAmount()}",
-                    unit = "ml",
-                    modifier = Modifier.weight(1f)
-                )
-                // Target
-                StatCard(
-                    label = "Target",
-                    value = "${p.targetAmount}",
-                    unit = "ml",
-                    modifier = Modifier.weight(1f)
-                )
+                StatCard(label = "Diminum", value = "${p.totalIntake}", unit = "ml", modifier = Modifier.weight(1f))
+                // pakai computeRemainingAmount()
+                StatCard(label = "Sisa", value = "${p.computeRemainingAmount()}", unit = "ml", modifier = Modifier.weight(1f))
+                StatCard(label = "Target", value = "${p.targetAmount}", unit = "ml", modifier = Modifier.weight(1f))
             }
 
-            Spacer(Modifier.height(72.dp)) // space for FAB
+            Spacer(Modifier.height(72.dp))
         }
     }
 }
@@ -239,9 +206,7 @@ private fun StatCard(
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(label, style = MaterialTheme.typography.labelSmall,
