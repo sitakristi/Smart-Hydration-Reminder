@@ -13,9 +13,9 @@ import com.rensy.smarthydration.database.AppDatabase
 import com.rensy.smarthydration.database.repository.DailyProgressRepository
 import com.rensy.smarthydration.database.repository.HydrationLogRepository
 import com.rensy.smarthydration.database.repository.UserRepository
-import com.rensy.smarthydration.ui.screen.DashboardScreen
-import com.rensy.smarthydration.ui.screen.HydrationScreen
-import com.rensy.smarthydration.ui.screen.ProfileScreen
+import com.rensy.smarthydration.ui.view.DashboardScreen
+import com.rensy.smarthydration.ui.view.HydrationScreen
+import com.rensy.smarthydration.ui.view.ProfileScreen
 
 // ── Route constants ───────────────────────────────────────────────────────────
 
@@ -74,7 +74,7 @@ fun AppNavigation() {
         }
 
         composable(Routes.DASHBOARD) {
-            DashboardScreen(
+            DashboardScreen (
                 userController = userController,
                 progressController = progressController,
                 onNavigateToHydration = {
@@ -87,7 +87,7 @@ fun AppNavigation() {
         }
 
         composable(Routes.HYDRATION) {
-            HydrationScreen(
+            HydrationScreen (
                 userController = userController,
                 hydrationController = hydrationController,
                 progressController = progressController,
