@@ -4,3 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
 }
+
+// Read namespace from gradle.properties
+ext {
+    set("app_namespace", properties["app.namespace"] as String? ?: "com.rensy.smarthydration")
+}

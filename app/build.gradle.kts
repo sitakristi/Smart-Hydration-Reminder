@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.rensy.smarthydration"
+    namespace = rootProject.ext.get("app_namespace") as String
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.rensy.smarthydration"
+        applicationId = rootProject.ext.get("app_namespace") as String
         minSdk = 28
         targetSdk = 36
         versionCode = 1
