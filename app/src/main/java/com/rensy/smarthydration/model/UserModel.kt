@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(tableName = "USER")
-data class User(
+data class UserModel(
     @PrimaryKey(autoGenerate = true)
     val userID: Int = 0,
     val name: String,

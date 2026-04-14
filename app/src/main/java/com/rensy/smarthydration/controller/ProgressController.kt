@@ -2,7 +2,7 @@ package com.rensy.smarthydration.controller
 
 import com.rensy.smarthydration.database.repository.DailyProgressRepository
 import com.rensy.smarthydration.database.repository.HydrationLogRepository
-import com.rensy.smarthydration.model.DailyProgress
+import com.rensy.smarthydration.model.DailyProgressModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,13 +23,13 @@ open class ProgressController(
      * @param userID    ID pengguna
      * @param target    Target harian (ml) — diambil dari User.dailyTarget
      */
-    suspend fun getTodayProgress(userID: Int, target: Int): DailyProgress {
+    suspend fun getTodayProgress(userID: Int, target: Int): DailyProgressModel {
         val existing = progressRepository.getTodayProgress(userID)
         if (existing != null) return existing
 
         // Buat record baru untuk hari ini
         val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val newProgress = DailyProgress(
+        val newProgress = DailyProgressModel(
             userID = userID,
             date = today,
             totalIntake = 0,
@@ -62,7 +62,7 @@ open class ProgressController(
         userID: Int,
         startDate: String,
         endDate: String
-    ): List<DailyProgress> {
+    ): List<DailyProgressModel> {
         return progressRepository.getProgressBetweenDates(userID, startDate, endDate)
     }
 
@@ -76,7 +76,7 @@ open class ProgressController(
     /**
      * Menghitung rata-rata intake harian dari list progress.
      */
-    fun calculateAverageIntake(progressList: List<DailyProgress>): Float {
+    fun calculateAverageIntake(progressList: List<DailyProgressModel>): Float {
         if (progressList.isEmpty()) return 0f
         return progressList.sumOf { it.totalIntake }.toFloat() / progressList.size
     }

@@ -7,12 +7,12 @@ import androidx.room.RoomDatabase
 import com.rensy.smarthydration.database.dao.DailyProgressDao
 import com.rensy.smarthydration.database.dao.HydrationLogDao
 import com.rensy.smarthydration.database.dao.UserDao
-import com.rensy.smarthydration.model.DailyProgress
-import com.rensy.smarthydration.model.HydrationLog
-import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.model.DailyProgressModel
+import com.rensy.smarthydration.model.HydrationLogModel
+import com.rensy.smarthydration.model.UserModel
 
 @Database(
-    entities = [User::class, HydrationLog::class, DailyProgress::class],
+    entities = [UserModel::class, HydrationLogModel::class, DailyProgressModel::class],
     version = 1,
     exportSchema = false
 )

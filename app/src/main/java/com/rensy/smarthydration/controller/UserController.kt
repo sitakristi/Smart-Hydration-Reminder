@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.controller
 
 import com.rensy.smarthydration.database.repository.UserRepository
-import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.model.UserModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +25,7 @@ open class UserController(private val userRepository: UserRepository) {
      */
     suspend fun saveUser(name: String, birthDate: Long, gender: String, weightKg: Float): Long {
         if (!validateInput(name, birthDate, gender)) return -1L
-        val user = User(
+        val user = UserModel(
             name = name.trim(),
             birthDate = birthDate,
             gender = gender,
@@ -40,7 +40,7 @@ open class UserController(private val userRepository: UserRepository) {
      */
     suspend fun updateUser(userID: Int, name: String, birthDate: Long, gender: String, weightKg: Float) {
         if (!validateInput(name, birthDate, gender)) return
-        val user = User(
+        val user = UserModel(
             userID = userID,
             name = name.trim(),
             birthDate = birthDate,
@@ -54,14 +54,14 @@ open class UserController(private val userRepository: UserRepository) {
      * Mengambil data pengguna dari database.
      * Karena single-user app, tidak perlu parameter userID.
      */
-    suspend fun loadUser(): User? {
+    suspend fun loadUser(): UserModel? {
         return userRepository.getUser()
     }
 
     /**
      * Mengambil data pengguna berdasarkan userID.
      */
-    suspend fun loadUser(userID: Int): User? {
+    suspend fun loadUser(userID: Int): UserModel? {
         return userRepository.loadUser(userID)
     }
 

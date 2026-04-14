@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "HYDRATION_LOG",
     foreignKeys = [
         ForeignKey(
-            entity = User::class,
+            entity = UserModel::class,
             parentColumns = ["userID"],
             childColumns = ["userID"],
             onDelete = ForeignKey.CASCADE
@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["userID"]), Index(value = ["logDate"])]
 )
-data class HydrationLog(
+data class HydrationLogModel(
     @PrimaryKey(autoGenerate = true)
     val logID: Int = 0,
     val userID: Int,

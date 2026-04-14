@@ -1,16 +1,16 @@
 package com.rensy.smarthydration.database.dao
 
 import androidx.room.*
-import com.rensy.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.HydrationLogModel
 
 @Dao
 interface HydrationLogDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(log: HydrationLog): Long
+    suspend fun insert(log: HydrationLogModel): Long
 
     @Delete
-    suspend fun delete(log: HydrationLog)
+    suspend fun delete(log: HydrationLogModel)
 
     @Query("DELETE FROM HYDRATION_LOG WHERE logID = :logID")
     suspend fun deleteById(logID: Int)
@@ -19,7 +19,7 @@ interface HydrationLogDao {
      * Ambil semua log untuk user pada tanggal tertentu (format "yyyy-MM-dd").
      */
     @Query("SELECT * FROM HYDRATION_LOG WHERE userID = :userID AND logDate = :date ORDER BY timestamp ASC")
-    suspend fun getLogsByDate(userID: Int, date: String): List<HydrationLog>
+    suspend fun getLogsByDate(userID: Int, date: String): List<HydrationLogModel>
 
     /**
      * Ambil total intake hari ini untuk user tertentu.
@@ -31,8 +31,8 @@ interface HydrationLogDao {
      * Ambil semua log dalam rentang tanggal (untuk laporan bulanan).
      */
     @Query("SELECT * FROM HYDRATION_LOG WHERE userID = :userID AND logDate BETWEEN :startDate AND :endDate ORDER BY timestamp ASC")
-    suspend fun getLogsBetweenDates(userID: Int, startDate: String, endDate: String): List<HydrationLog>
+    suspend fun getLogsBetweenDates(userID: Int, startDate: String, endDate: String): List<HydrationLogModel>
 
     @Query("SELECT * FROM HYDRATION_LOG WHERE userID = :userID ORDER BY timestamp DESC")
-    suspend fun getAllLogs(userID: Int): List<HydrationLog>
+    suspend fun getAllLogs(userID: Int): List<HydrationLogModel>
 }

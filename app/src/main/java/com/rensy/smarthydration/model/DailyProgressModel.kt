@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "DAILY_PROGRESS",
     foreignKeys = [
         ForeignKey(
-            entity = User::class,
+            entity = UserModel::class,
             parentColumns = ["userID"],
             childColumns = ["userID"],
             onDelete = ForeignKey.CASCADE
@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["userID"]), Index(value = ["userID", "date"], unique = true)]
 )
-data class DailyProgress(
+data class DailyProgressModel(
     @PrimaryKey(autoGenerate = true)
     val progressID: Int = 0,
     val userID: Int,
@@ -31,7 +31,7 @@ data class DailyProgress(
     /**
      * Menghitung total intake dari list HydrationLog hari ini.
      */
-    fun calculateTotal(logs: List<HydrationLog>): Int {
+    fun calculateTotal(logs: List<HydrationLogModel>): Int {
         return logs.sumOf { it.amount }
     }
 
@@ -61,7 +61,7 @@ data class DailyProgress(
     /**
      * Mengembalikan salinan objek yang sudah diperbarui berdasarkan intake baru.
      */
-    fun withUpdatedIntake(newTotalIntake: Int): DailyProgress {
+    fun withUpdatedIntake(newTotalIntake: Int): DailyProgressModel {
         val newPercentage = if (targetAmount > 0)
             (newTotalIntake.toFloat() / targetAmount.toFloat()) * 100f
         else 0f

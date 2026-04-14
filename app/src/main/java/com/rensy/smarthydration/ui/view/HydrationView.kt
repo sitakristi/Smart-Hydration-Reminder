@@ -47,8 +47,8 @@ import androidx.compose.ui.unit.sp
 import com.rensy.smarthydration.controller.HydrationController
 import com.rensy.smarthydration.controller.ProgressController
 import com.rensy.smarthydration.controller.UserController
-import com.rensy.smarthydration.model.HydrationLog
-import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.model.HydrationLogModel
+import com.rensy.smarthydration.model.UserModel
 import com.rensy.smarthydration.ui.components.QuickWaterButton
 import com.rensy.smarthydration.ui.components.QuickWaterButtonRow
 import com.rensy.smarthydration.ui.theme.AccentOrange
@@ -77,8 +77,8 @@ fun HydrationScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    var user by remember { mutableStateOf<User?>(null) }
-    var logs by remember { mutableStateOf<List<HydrationLog>>(emptyList()) }
+    var user by remember { mutableStateOf<UserModel?>(null) }
+    var logs by remember { mutableStateOf<List<HydrationLogModel>>(emptyList()) }
     var selectedAmount by remember { mutableStateOf<Int?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var showMenu by remember { mutableStateOf(false) }

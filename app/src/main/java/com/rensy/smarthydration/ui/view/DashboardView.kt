@@ -51,8 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rensy.smarthydration.controller.ProgressController
 import com.rensy.smarthydration.controller.UserController
-import com.rensy.smarthydration.model.DailyProgress
-import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.model.DailyProgressModel
+import com.rensy.smarthydration.model.UserModel
 import com.rensy.smarthydration.ui.theme.AccentOrange
 import com.rensy.smarthydration.ui.theme.BackgroundWhite
 import com.rensy.smarthydration.ui.theme.DarkBlueProgress
@@ -70,8 +70,8 @@ fun DashboardScreen(
     onBack: () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var user by remember { mutableStateOf<User?>(null) }
-    var progress by remember { mutableStateOf<DailyProgress?>(null) }
+    var user by remember { mutableStateOf<UserModel?>(null) }
+    var progress by remember { mutableStateOf<DailyProgressModel?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var showMenu by remember { mutableStateOf(false) }
 

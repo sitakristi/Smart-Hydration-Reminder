@@ -2,7 +2,7 @@ package com.rensy.smarthydration.controller
 
 import com.rensy.smarthydration.database.repository.DailyProgressRepository
 import com.rensy.smarthydration.database.repository.HydrationLogRepository
-import com.rensy.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.HydrationLogModel
 
 /**
  * HydrationController — GRASP Controller untuk semua operasi terkait HydrationLog.
@@ -57,7 +57,7 @@ class HydrationController(
      * @param userID ID pengguna
      * @return List<HydrationLog> diurutkan dari paling lama ke paling baru
      */
-    suspend fun getTodayLogs(userID: Int): List<HydrationLog> {
+    suspend fun getTodayLogs(userID: Int): List<HydrationLogModel> {
         return hydrationLogRepository.getTodayLogs(userID)
     }
 

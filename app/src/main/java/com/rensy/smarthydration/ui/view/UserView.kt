@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.asPaddingValues
 import com.rensy.smarthydration.controller.UserController
-import com.rensy.smarthydration.model.User
+import com.rensy.smarthydration.model.UserModel
 import com.rensy.smarthydration.ui.theme.PrimaryBlue
 import com.rensy.smarthydration.ui.theme.AccentOrange
 import com.rensy.smarthydration.ui.theme.LightBlue
@@ -59,7 +59,7 @@ fun ProfileScreen(
 
     // State UI
     var isEditMode by remember { mutableStateOf(true) }
-    var existingUser by remember { mutableStateOf<User?>(null) }
+    var existingUser by remember { mutableStateOf<UserModel?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     var validationError by remember { mutableStateOf("") }
     var calculatedTarget by remember { mutableStateOf(0) }

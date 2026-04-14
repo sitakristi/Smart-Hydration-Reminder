@@ -1,29 +1,29 @@
 package com.rensy.smarthydration.database.dao
 
 import androidx.room.*
-import com.rensy.smarthydration.model.DailyProgress
+import com.rensy.smarthydration.model.DailyProgressModel
 
 @Dao
 interface DailyProgressDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(progress: DailyProgress): Long
+    suspend fun insert(progress: DailyProgressModel): Long
 
     @Update
-    suspend fun update(progress: DailyProgress)
+    suspend fun update(progress: DailyProgressModel)
 
     /**
      * Ambil progress harian untuk user pada tanggal tertentu (format "yyyy-MM-dd").
      * Karena ada UNIQUE(userID, date), hasilnya maksimal 1 record.
      */
     @Query("SELECT * FROM DAILY_PROGRESS WHERE userID = :userID AND date = :date LIMIT 1")
-    suspend fun getProgressByDate(userID: Int, date: String): DailyProgress?
+    suspend fun getProgressByDate(userID: Int, date: String): DailyProgressModel?
 
     /**
      * Ambil semua progress dalam rentang tanggal (untuk laporan).
      */
     @Query("SELECT * FROM DAILY_PROGRESS WHERE userID = :userID AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
-    suspend fun getProgressBetweenDates(userID: Int, startDate: String, endDate: String): List<DailyProgress>
+    suspend fun getProgressBetweenDates(userID: Int, startDate: String, endDate: String): List<DailyProgressModel>
 
     /**
      * Hitung jumlah hari target terpenuhi dalam rentang tanggal.

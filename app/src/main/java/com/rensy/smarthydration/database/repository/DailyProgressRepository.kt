@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.database.repository
 
 import com.rensy.smarthydration.database.dao.DailyProgressDao
-import com.rensy.smarthydration.model.DailyProgress
+import com.rensy.smarthydration.model.DailyProgressModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -9,16 +9,16 @@ class DailyProgressRepository(private val dailyProgressDao: DailyProgressDao) {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    suspend fun getTodayProgress(userID: Int): DailyProgress? {
+    suspend fun getTodayProgress(userID: Int): DailyProgressModel? {
         val today = dateFormat.format(Date())
         return dailyProgressDao.getProgressByDate(userID, today)
     }
 
-    suspend fun getProgressByDate(userID: Int, date: String): DailyProgress? {
+    suspend fun getProgressByDate(userID: Int, date: String): DailyProgressModel? {
         return dailyProgressDao.getProgressByDate(userID, date)
     }
 
-    suspend fun saveOrUpdateProgress(progress: DailyProgress) {
+    suspend fun saveOrUpdateProgress(progress: DailyProgressModel) {
         dailyProgressDao.insert(progress)
     }
 
@@ -28,7 +28,7 @@ class DailyProgressRepository(private val dailyProgressDao: DailyProgressDao) {
         val updated = if (existing != null) {
             existing.withUpdatedIntake(newTotalIntake)
         } else {
-            DailyProgress(
+            DailyProgressModel(
                 userID = userID,
                 date = today,
                 totalIntake = 0,
@@ -42,7 +42,7 @@ class DailyProgressRepository(private val dailyProgressDao: DailyProgressDao) {
         dailyProgressDao.insert(updated)
     }
 
-    suspend fun getProgressBetweenDates(userID: Int, startDate: String, endDate: String): List<DailyProgress> {
+    suspend fun getProgressBetweenDates(userID: Int, startDate: String, endDate: String): List<DailyProgressModel> {
         return dailyProgressDao.getProgressBetweenDates(userID, startDate, endDate)
     }
 

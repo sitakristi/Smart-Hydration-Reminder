@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rensy.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.HydrationLogModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +23,7 @@ import java.util.*
  */
 @Composable
 fun HydrationLogItem(
-    log: HydrationLog,
+    log: HydrationLogModel,
     onDeleteConfirmed: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {

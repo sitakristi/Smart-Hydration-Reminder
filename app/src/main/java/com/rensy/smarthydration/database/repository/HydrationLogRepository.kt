@@ -1,7 +1,7 @@
 package com.rensy.smarthydration.database.repository
 
 import com.rensy.smarthydration.database.dao.HydrationLogDao
-import com.rensy.smarthydration.model.HydrationLog
+import com.rensy.smarthydration.model.HydrationLogModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,7 +16,7 @@ class HydrationLogRepository(private val hydrationLogDao: HydrationLogDao) {
      */
     suspend fun saveLog(userID: Int, amount: Int): Long {
         val now = System.currentTimeMillis()
-        val log = HydrationLog(
+        val log = HydrationLogModel(
             userID = userID,
             amount = amount,
             timestamp = now,
@@ -35,7 +35,7 @@ class HydrationLogRepository(private val hydrationLogDao: HydrationLogDao) {
     /**
      * Mengambil semua log hari ini untuk user tertentu.
      */
-    suspend fun getTodayLogs(userID: Int): List<HydrationLog> {
+    suspend fun getTodayLogs(userID: Int): List<HydrationLogModel> {
         val today = dateFormat.format(Date())
         return hydrationLogDao.getLogsByDate(userID, today)
     }
@@ -51,7 +51,7 @@ class HydrationLogRepository(private val hydrationLogDao: HydrationLogDao) {
     /**
      * Mengambil log dalam rentang tanggal tertentu (untuk laporan bulanan).
      */
-    suspend fun getLogsBetweenDates(userID: Int, startDate: String, endDate: String): List<HydrationLog> {
+    suspend fun getLogsBetweenDates(userID: Int, startDate: String, endDate: String): List<HydrationLogModel> {
         return hydrationLogDao.getLogsBetweenDates(userID, startDate, endDate)
     }
 
